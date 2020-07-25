@@ -4,17 +4,26 @@
 #include "queue.cpp"
 #include "validation.cpp"
 
-//I try to make it so that each cpp file has only one function which gets called by main. In this one, all functions are called by main, as a result, it's much more difficult to follow
+VkDeviceQueueCreateInfo createQueueCreateInfo(QueueFamilyIndices inds, const float *queuePriorities);
+VkPhysicalDeviceFeatures createDeviceFeatures();
+VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures);
 
-VkDevice createLogicalDevice(VkPhysicalDevice physDev, VkDeviceCreateInfo *pDci) {
+VkDevice createLogicalDevice(VkPhysicalDevice physDev) {
 	VkDevice device;
-	if (vkCreateDevice(physDev, pDci, nullptr, &device) != VK_SUCCESS) {
+
+	QueueFamilyIndices inds = findQueueFamilies(physDev);
+	const float queuePriorities = 1.0f;
+	VkDeviceQueueCreateInfo qCreateInfo = createQueueCreateInfo(inds, &queuePriorities);
+	VkPhysicalDeviceFeatures physDevFeatures = createDeviceFeatures();
+	VkDeviceCreateInfo dci = createDeviceCreateInfo(&qCreateInfo, 1, &physDevFeatures);
+
+	if (vkCreateDevice(physDev, &dci, nullptr, &device) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create logical device!");
 	}
 	return device;
 }
 
-VkDeviceQueueCreateInfo createQueueCreateInfo(QueueFamilyIndices inds, float *queuePriorities) {
+VkDeviceQueueCreateInfo createQueueCreateInfo(QueueFamilyIndices inds, const float *queuePriorities) {
 	VkDeviceQueueCreateInfo queueCreateInfo{};
 	queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 	queueCreateInfo.queueFamilyIndex = inds.graphicsFamily.value();

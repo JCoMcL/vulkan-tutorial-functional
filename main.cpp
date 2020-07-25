@@ -21,13 +21,13 @@ void run() {
 	VkPhysicalDevice physDev = getPhysDev(instance);
 
 	QueueFamilyIndices inds = findQueueFamilies(physDev); //This is the second time that QueueFamilyIndices have been created for this device, I'm choosing to ignore that for now
-	float queuePriorities = 1.0f;
-	VkDeviceQueueCreateInfo qci = createQueueCreateInfo(inds, &queuePriorities);
+	//const float queuePriorities = 1.0f;
+	//VkDeviceQueueCreateInfo qci = createQueueCreateInfo(inds, &queuePriorities);
 
-	VkPhysicalDeviceFeatures physDevFeatures = createDeviceFeatures();
-	VkDeviceCreateInfo dci = createDeviceCreateInfo(&qci, 1, &physDevFeatures);
+	//VkPhysicalDeviceFeatures physDevFeatures = createDeviceFeatures();
+	//VkDeviceCreateInfo dci = createDeviceCreateInfo(&qci, 1, &physDevFeatures);
 
-	VkDevice lDev = createLogicalDevice(physDev, &dci);
+	VkDevice lDev = createLogicalDevice(physDev);
 
 	VkQueue graphicsQueue;
 	vkGetDeviceQueue(lDev, inds.graphicsFamily.value(), 0, &graphicsQueue);
