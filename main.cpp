@@ -6,31 +6,20 @@
 
 #include "glfw.cpp"
 #include "instance.cpp"
+#include "queue.cpp"
 #include "physical-device.cpp"
 #include "logical-device.cpp"
 #include "surface.cpp"
 
 void run() {
 	GLFWwindow *window = initWindow();
-
 	VkInstance instance = createVulkanInstance();
-
 	VkSurfaceKHR surface = createSurface(window, &instance);
-
-	VkPhysicalDevice physDev = getPhysDev(instance);
-
-	float queuePriorities = 1.0f;
-	QueueFamilyIndices inds = findQueueFamilies(physDev);
-	VkDeviceQueueCreateInfo qci = createQueueCreateInfo(inds, &queuePriorities);
-
-	VkPhysicalDeviceFeatures physDevFeatures = createDeviceFeatures();
-	VkDeviceCreateInfo dci = createDeviceCreateInfo(&qci, 1, &physDevFeatures);
-
-	VkDevice lDev = createLogicalDevice(physDev, &dci);
+	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance);
+	VkDevice lDev = createLogicalDevice(devInds);
 
 	VkQueue graphicsQueue;
-	vkGetDeviceQueue(lDev, inds.graphicsFamily.value(), 0, &graphicsQueue);
-
+	vkGetDeviceQueue(lDev, devInds.inds.graphicsFamily.value(), 0, &graphicsQueue);
 
 	glfwRun(window);
 

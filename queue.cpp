@@ -10,9 +10,15 @@ struct QueueFamilyIndices {
 	bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
 };
 
-//TODO: compile/find a list of queue families
-QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
+struct PhysicalDeviceQueueFamilyIndices {
+	VkPhysicalDevice dev;
 	QueueFamilyIndices inds;
+};
+
+//TODO: compile/find a list of queue families
+PhysicalDeviceQueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
+	PhysicalDeviceQueueFamilyIndices devInds;
+	devInds.dev = dev;
 
 	uint32_t queueFamilyCount = 0;
 	vkGetPhysicalDeviceQueueFamilyProperties(dev, &queueFamilyCount, nullptr);
@@ -23,12 +29,12 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
 	int i = 0;
 	for (const auto& queueFamily : queueFamilies) {
 		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-			inds.graphicsFamily = i;
+			devInds.inds.graphicsFamily = i;
 		}
-		if (inds.isComplete()) { break; }
+		if (devInds.inds.isComplete()) { break; }
 
 		i++;
 	}
 
-	return inds;
+	return devInds;
 }
