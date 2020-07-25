@@ -6,6 +6,7 @@
 
 #include "glfw.cpp"
 #include "instance.cpp"
+#include "queue.cpp"
 #include "physical-device.cpp"
 #include "logical-device.cpp"
 #include "surface.cpp"
@@ -19,8 +20,8 @@ void run() {
 
 	VkPhysicalDevice physDev = getPhysDev(instance);
 
+	QueueFamilyIndices inds = findQueueFamilies(physDev); //This is the second time that QueueFamilyIndices have been created for this device, I'm choosing to ignore that for now
 	float queuePriorities = 1.0f;
-	QueueFamilyIndices inds = findQueueFamilies(physDev);
 	VkDeviceQueueCreateInfo qci = createQueueCreateInfo(inds, &queuePriorities);
 
 	VkPhysicalDeviceFeatures physDevFeatures = createDeviceFeatures();
