@@ -2,10 +2,7 @@
 #include <cstring>
 #include <vector>
 #include <iostream>
-
-#ifndef unint32_t
-	#include <vulkan/vulkan.h>
-#endif
+#include <vulkan/vulkan.h>
 
 const std::vector<const char*> validationLayers = {
 	"VK_LAYER_KHRONOS_validation"
