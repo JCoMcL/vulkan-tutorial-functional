@@ -2,18 +2,19 @@
 #include <iostream>
 #include "queue.cpp"
 
-bool isDeviceSuitable(VkPhysicalDevice device);
+bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices device);
 
-VkPhysicalDevice getPhysDev(VkInstance instance) {
+PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance) {
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
 	std::vector<VkPhysicalDevice> devices(deviceCount);
 	vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
-	VkPhysicalDevice pd;
+	PhysicalDeviceQueueFamilyIndices devInds;
+
 	for (const auto& device : devices) {
-		if (isDeviceSuitable(device)) {
-			pd = device;
+		devInds = findQueueFamilies(device);
+		if (isDeviceSuitable(devInds)) {
 			break;
 		}
 	}	
@@ -22,10 +23,10 @@ VkPhysicalDevice getPhysDev(VkInstance instance) {
 		throw std::runtime_error("failed to find GPUs with Vulkan support!");
 	}
 
-	return pd;
+	return devInds;
 }
 
-bool isDeviceSuitable(VkPhysicalDevice device) {
+bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices devInds) {
 	/*
 	VkPhysicalDeviceProperties deviceProperties;
 	vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -33,8 +34,6 @@ bool isDeviceSuitable(VkPhysicalDevice device) {
 	VkPhysicalDeviceFeatures deviceFeatures;
 	vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
 	*/
-	QueueFamilyIndices indices = findQueueFamilies(device);
-
-	return indices.isComplete();
+	return devInds.inds.isComplete();
 }
 

@@ -8,16 +8,15 @@ VkDeviceQueueCreateInfo createQueueCreateInfo(QueueFamilyIndices inds, const flo
 VkPhysicalDeviceFeatures createDeviceFeatures();
 VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures);
 
-VkDevice createLogicalDevice(VkPhysicalDevice physDev) {
+VkDevice createLogicalDevice(PhysicalDeviceQueueFamilyIndices devInds) {
 	VkDevice device;
 
-	QueueFamilyIndices inds = findQueueFamilies(physDev);
 	const float queuePriorities = 1.0f;
-	VkDeviceQueueCreateInfo qCreateInfo = createQueueCreateInfo(inds, &queuePriorities);
+	VkDeviceQueueCreateInfo qCreateInfo = createQueueCreateInfo(devInds.inds, &queuePriorities);
 	VkPhysicalDeviceFeatures physDevFeatures = createDeviceFeatures();
 	VkDeviceCreateInfo dci = createDeviceCreateInfo(&qCreateInfo, 1, &physDevFeatures);
 
-	if (vkCreateDevice(physDev, &dci, nullptr, &device) != VK_SUCCESS) {
+	if (vkCreateDevice(devInds.dev, &dci, nullptr, &device) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create logical device!");
 	}
 	return device;
