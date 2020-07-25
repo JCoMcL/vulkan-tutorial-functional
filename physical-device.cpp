@@ -3,7 +3,6 @@
 #include "queue.cpp"
 
 bool isDeviceSuitable(VkPhysicalDevice device);
-QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev);
 
 VkPhysicalDevice getPhysDev(VkInstance instance) {
 	uint32_t deviceCount = 0;

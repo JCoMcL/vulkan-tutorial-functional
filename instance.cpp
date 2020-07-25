@@ -1,13 +1,5 @@
- //TODO address this mess
-#ifndef GLFW_INCLUDE_VULKAN
-	#define GLFW_INCLUDE_VULKAN
-	#include <GLFW/glfw3.h>
-#endif
-
-#ifndef malloc
-	#include <cstdlib>
-	#include <iostream>
-#endif
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 #include "validation.cpp"
 
