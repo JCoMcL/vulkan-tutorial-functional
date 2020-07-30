@@ -4,7 +4,7 @@
 
 bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices device);
 
-PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance) {
+PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR surface) {
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
@@ -14,7 +14,7 @@ PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance) {
 
 	for (const auto& device : devices) {
 		devInds.dev = device;
-		devInds.inds = findQueueFamilies(device);
+		devInds.inds = findQueueFamilies(device, surface);
 		if (isDeviceSuitable(devInds)) {
 			break;
 		}

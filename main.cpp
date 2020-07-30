@@ -15,7 +15,7 @@ void run() {
 	GLFWwindow *window = initWindow();
 	VkInstance instance = createVulkanInstance();
 	VkSurfaceKHR surface = createSurface(window, &instance);
-	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance);
+	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance, surface);
 	VkDevice lDev = createLogicalDevice(devInds);
 
 	VkQueue graphicsQueue;

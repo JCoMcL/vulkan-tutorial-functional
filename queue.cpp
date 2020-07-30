@@ -1,6 +1,7 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <iostream>
 #include <optional>
 
 struct QueueFamilyIndices {
@@ -16,9 +17,10 @@ struct PhysicalDeviceQueueFamilyIndices {
 };
 
 //TODO: compile/find a list of queue families
-QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev, VkSurfaceKHR surface) {
+	QueueFamilyIndices indices;
 	PhysicalDeviceQueueFamilyIndices devInds;
-	devInds.dev = dev;
+	dev = dev;
 
 	uint32_t queueFamilyCount = 0;
 	vkGetPhysicalDeviceQueueFamilyProperties(dev, &queueFamilyCount, nullptr);
@@ -28,13 +30,22 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
 
 	int i = 0;
 	for (const auto& queueFamily : queueFamilies) {
-		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-			devInds.inds.graphicsFamily = i;
-		}
-		if (devInds.inds.isComplete()) { break; }
+
+		VkBool32 presentSupport = false;
+		vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, surface, &presentSupport);
+		if ( presentSupport )
+			indices.presentFamily = i;
+
+		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+			indices.graphicsFamily = i;
+
+		if (indices.isComplete()) { break; }
 
 		i++;
 	}
 
-	return devInds.inds;
+	if (indices.isComplete())
+		return indices;
+	else 
+		throw std::runtime_error("failed to satisfy queue family requirements");
 }
