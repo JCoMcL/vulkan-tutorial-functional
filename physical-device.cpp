@@ -13,7 +13,8 @@ PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance) {
 	PhysicalDeviceQueueFamilyIndices devInds;
 
 	for (const auto& device : devices) {
-		devInds = findQueueFamilies(device);
+		devInds.dev = device;
+		devInds.inds = findQueueFamilies(device);
 		if (isDeviceSuitable(devInds)) {
 			break;
 		}

@@ -16,7 +16,7 @@ struct PhysicalDeviceQueueFamilyIndices {
 };
 
 //TODO: compile/find a list of queue families
-PhysicalDeviceQueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
+QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
 	PhysicalDeviceQueueFamilyIndices devInds;
 	devInds.dev = dev;
 
@@ -36,5 +36,5 @@ PhysicalDeviceQueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev) {
 		i++;
 	}
 
-	return devInds;
+	return devInds.inds;
 }
