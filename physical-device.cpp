@@ -20,13 +20,14 @@ PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR
 		}
 	}	
 
-	if (deviceCount == 0) {
-		throw std::runtime_error("failed to find GPUs with Vulkan support!");
+	if (!deviceCount || !isDeviceSuitable(devInds)) {
+		throw std::runtime_error("failed to find GPU to satisfy requiremnts");
 	}
 
 	return devInds;
 }
 
+//TODO this function seems like may need to be contantly expanded based on the specifics of the program. Ideally there would be only one such function and it would be referenced directly by main
 bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices devInds) {
 	/*
 	VkPhysicalDeviceProperties deviceProperties;

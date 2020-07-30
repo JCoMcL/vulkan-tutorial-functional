@@ -16,11 +16,9 @@ struct PhysicalDeviceQueueFamilyIndices {
 	QueueFamilyIndices inds;
 };
 
-//TODO: compile/find a list of queue families
+//TODO this function seems like may need to be contantly expanded based on the specifics of the program. Ideally there would be only one such function and it would be referenced directly by main
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev, VkSurfaceKHR surface) {
 	QueueFamilyIndices indices;
-	PhysicalDeviceQueueFamilyIndices devInds;
-	dev = dev;
 
 	uint32_t queueFamilyCount = 0;
 	vkGetPhysicalDeviceQueueFamilyProperties(dev, &queueFamilyCount, nullptr);
