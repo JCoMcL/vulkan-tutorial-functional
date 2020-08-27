@@ -29,6 +29,7 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev, VkSurfaceKHR surface)
 	int i = 0;
 	for (const auto& queueFamily : queueFamilies) {
 
+		//TODO minimise number of queues, prefer queues which satisfy multiple dependancies
 		VkBool32 presentSupport = false;
 		vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, surface, &presentSupport);
 		if ( presentSupport )
