@@ -16,7 +16,7 @@ struct PhysicalDeviceQueueFamilyIndices {
 	QueueFamilyIndices inds;
 };
 
-//TODO this function seems like may need to be contantly expanded based on the specifics of the program. Ideally there would be only one such function and it would be referenced directly by main
+//TODO this function seems like may need to be constantly expanded based on the specifics of the program. Ideally there would be only one such function and it would be referenced directly by main
 QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev, VkSurfaceKHR surface) {
 	QueueFamilyIndices indices;
 
@@ -29,7 +29,7 @@ QueueFamilyIndices findQueueFamilies(VkPhysicalDevice dev, VkSurfaceKHR surface)
 	int i = 0;
 	for (const auto& queueFamily : queueFamilies) {
 
-		//TODO minimise number of queues, prefer queues which satisfy multiple dependancies
+		//TODO minimise number of queues, prefer queues which satisfy multiple dependencies
 		VkBool32 presentSupport = false;
 		vkGetPhysicalDeviceSurfaceSupportKHR(dev, i, surface, &presentSupport);
 		if ( presentSupport )

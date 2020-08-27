@@ -1,7 +1,7 @@
 #define GLFW_INCLUDE_VULKAN
 
 // these next two includes are part of the above line and are ignored in compilation
-// they are only neccesary for the language server to recognise the types
+// they are only neccesary as the language server does not recognise that the above lines has this effect
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
 #include <stdexcept>
