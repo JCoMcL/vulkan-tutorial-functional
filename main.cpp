@@ -18,6 +18,9 @@ void run() {
 	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance, surface);
 	VkDevice lDev = createLogicalDevice(devInds);
 
+	VkQueue presentQueue;
+	vkGetDeviceQueue(lDev, devInds.inds.presentFamily.value(), 0, &presentQueue);
+
 	VkQueue graphicsQueue;
 	vkGetDeviceQueue(lDev, devInds.inds.graphicsFamily.value(), 0, &graphicsQueue);
 
