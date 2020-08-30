@@ -8,9 +8,9 @@
 std::vector<VkDeviceQueueCreateInfo>  createQueueCreateInfos(QueueFamilyIndices inds, const float *queuePriorities);
 VkDeviceQueueCreateInfo createQueueCreateInfo(uint32_t queueFamily, const float *queuePriorities);
 VkPhysicalDeviceFeatures createDeviceFeatures();
-VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures);
+VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures,	std::vector<const char*> enabledExtensions);
 
-VkDevice createLogicalDevice(PhysicalDeviceQueueFamilyIndices devInds) {
+VkDevice createLogicalDevice(PhysicalDeviceQueueFamilyIndices devInds, const std::vector<const char*> extensions) {
 	VkDevice device;
 
 	const float queuePriorities = 1.0f;
@@ -19,7 +19,8 @@ VkDevice createLogicalDevice(PhysicalDeviceQueueFamilyIndices devInds) {
 	VkDeviceCreateInfo dci = createDeviceCreateInfo(
 			qCreateInfos.data(),
 			static_cast<uint32_t>(qCreateInfos.size()),
-			&physDevFeatures
+			&physDevFeatures,
+			extensions
 		);
 
 	if (vkCreateDevice(devInds.dev, &dci, nullptr, &device) != VK_SUCCESS) {
@@ -55,14 +56,20 @@ VkPhysicalDeviceFeatures createDeviceFeatures() {
 	return devFeatures;
 }
 
-VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures) {
+VkDeviceCreateInfo createDeviceCreateInfo(
+		VkDeviceQueueCreateInfo *pQCreateInfo,
+		int qCreateInfoCount,
+		VkPhysicalDeviceFeatures *pPhysDevFeatures,
+		std::vector<const char*> enabledExtensions
+	) {
 	VkDeviceCreateInfo dci{};
 	dci.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 	dci.pQueueCreateInfos = pQCreateInfo;
 	dci.queueCreateInfoCount = qCreateInfoCount;
 	dci.pEnabledFeatures = pPhysDevFeatures;
 
-	dci.enabledExtensionCount = 0;
+	dci.enabledExtensionCount = static_cast<uint32_t>(enabledExtensions.size());
+	dci.ppEnabledExtensionNames = enabledExtensions.data();
 
 	if (enableValidationLayers) {
 		dci.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());

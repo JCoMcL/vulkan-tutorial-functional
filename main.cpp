@@ -15,8 +15,10 @@ void run() {
 	GLFWwindow *window = initWindow();
 	VkInstance instance = createVulkanInstance();
 	VkSurfaceKHR surface = createSurface(window, &instance);
-	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance, surface);
-	VkDevice lDev = createLogicalDevice(devInds);
+
+	const std::vector<const char*> extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME }; //TODO verbose type, could use a typedef
+	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance, surface, extensions);
+	VkDevice lDev = createLogicalDevice(devInds, extensions);
 
 	VkQueue presentQueue;
 	vkGetDeviceQueue(lDev, devInds.inds.presentFamily.value(), 0, &presentQueue);

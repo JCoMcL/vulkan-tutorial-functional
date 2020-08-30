@@ -3,10 +3,10 @@
 #include <set>
 #include "queue.cpp"
 
-bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices device);
+bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices device, const std::vector<const char*> extensions);
 bool extensionsSupported(VkPhysicalDevice pDev, std::vector<const char*> extensions);
 
-PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR surface) {
+PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR surface, const std::vector<const char*> extensions) {
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
@@ -17,12 +17,12 @@ PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR
 	for (const auto& device : devices) {
 		devInds.dev = device;
 		devInds.inds = findQueueFamilies(device, surface);
-		if (isDeviceSuitable(devInds)) {
+		if (isDeviceSuitable(devInds, extensions)) {
 			break;
 		}
 	}	
 
-	if (!deviceCount || !isDeviceSuitable(devInds)) {
+	if (!deviceCount || !isDeviceSuitable(devInds, extensions)) {
 		throw std::runtime_error("failed to find GPU to satisfy requiremnts");
 	}
 
@@ -30,8 +30,7 @@ PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR
 }
 
 //TODO this function seems like may need to be contantly expanded based on the specifics of the program. Ideally there would be only one such function and it would be referenced directly by main
-bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices devInds) {
-	const std::vector<const char*> extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME }; //TODO: clearly this doesn't belong here
+bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices devInds, const std::vector<const char*> extensions) {
 	return (
 		devInds.inds.isComplete() &&
 		extensionsSupported(devInds.dev, extensions)
