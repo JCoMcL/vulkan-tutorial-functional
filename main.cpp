@@ -10,15 +10,16 @@
 #include "physical-device.cpp"
 #include "logical-device.cpp"
 #include "surface.cpp"
+#include "extensions.cpp"
 
 void run() {
 	GLFWwindow *window = initWindow();
 	VkInstance instance = createVulkanInstance();
 	VkSurfaceKHR surface = createSurface(window, &instance);
 
-	const std::vector<const char*> extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME }; //TODO verbose type, could use a typedef
-	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance, surface, extensions);
-	VkDevice lDev = createLogicalDevice(devInds, extensions);
+	extNames extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME }; //TODO verbose type, could use a typedef
+	PhysicalDeviceQueueFamilyIndices devInds = createPhysDev(instance, surface, &extensions);
+	VkDevice lDev = createLogicalDevice(devInds, &extensions);
 
 	VkQueue presentQueue;
 	vkGetDeviceQueue(lDev, devInds.inds.presentFamily.value(), 0, &presentQueue);

@@ -2,11 +2,11 @@
 #include <iostream>
 #include <set>
 #include "queue.cpp"
+#include "extensions.cpp"
 
-bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices device, const std::vector<const char*> extensions);
-bool extensionsSupported(VkPhysicalDevice pDev, std::vector<const char*> extensions);
+bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices device, extNames *extensions);
 
-PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR surface, const std::vector<const char*> extensions) {
+PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR surface, extNames *extensions) {
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
@@ -30,24 +30,10 @@ PhysicalDeviceQueueFamilyIndices createPhysDev(VkInstance instance, VkSurfaceKHR
 }
 
 //TODO this function seems like may need to be contantly expanded based on the specifics of the program. Ideally there would be only one such function and it would be referenced directly by main
-bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices devInds, const std::vector<const char*> extensions) {
+bool isDeviceSuitable(PhysicalDeviceQueueFamilyIndices devInds, extNames *extensions) {
 	return (
 		devInds.inds.isComplete() &&
-		extensionsSupported(devInds.dev, extensions)
+		extensionsSupported(&devInds.dev, extensions)
 	);
 } 
 
-bool extensionsSupported(VkPhysicalDevice pDev, std::vector<const char*> extensions) {
-	uint32_t extensionCount;
-	vkEnumerateDeviceExtensionProperties(pDev, nullptr, &extensionCount, nullptr);
-
-	std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-	vkEnumerateDeviceExtensionProperties(pDev, nullptr, &extensionCount, availableExtensions.data());
-
-	std::set<std::string> requiredExtensions(extensions.begin(), extensions.end());
-
-	for (const auto& extension : availableExtensions)
-		requiredExtensions.erase(extension.extensionName);
-
-	return requiredExtensions.empty();
-}

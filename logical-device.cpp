@@ -4,13 +4,14 @@
 #include <set>
 #include "queue.cpp"
 #include "validation.cpp"
+#include "extensions.cpp"
 
 std::vector<VkDeviceQueueCreateInfo>  createQueueCreateInfos(QueueFamilyIndices inds, const float *queuePriorities);
 VkDeviceQueueCreateInfo createQueueCreateInfo(uint32_t queueFamily, const float *queuePriorities);
 VkPhysicalDeviceFeatures createDeviceFeatures();
-VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures,	std::vector<const char*> enabledExtensions);
+VkDeviceCreateInfo createDeviceCreateInfo(VkDeviceQueueCreateInfo *pQCreateInfo, int qCreateInfoCount, VkPhysicalDeviceFeatures *pPhysDevFeatures,	extNames *enabledExtensions);
 
-VkDevice createLogicalDevice(PhysicalDeviceQueueFamilyIndices devInds, const std::vector<const char*> extensions) {
+VkDevice createLogicalDevice(PhysicalDeviceQueueFamilyIndices devInds, extNames *extensions) {
 	VkDevice device;
 
 	const float queuePriorities = 1.0f;
@@ -60,7 +61,7 @@ VkDeviceCreateInfo createDeviceCreateInfo(
 		VkDeviceQueueCreateInfo *pQCreateInfo,
 		int qCreateInfoCount,
 		VkPhysicalDeviceFeatures *pPhysDevFeatures,
-		std::vector<const char*> enabledExtensions
+		extNames *enabledExtensions
 	) {
 	VkDeviceCreateInfo dci{};
 	dci.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -68,8 +69,8 @@ VkDeviceCreateInfo createDeviceCreateInfo(
 	dci.queueCreateInfoCount = qCreateInfoCount;
 	dci.pEnabledFeatures = pPhysDevFeatures;
 
-	dci.enabledExtensionCount = static_cast<uint32_t>(enabledExtensions.size());
-	dci.ppEnabledExtensionNames = enabledExtensions.data();
+	dci.enabledExtensionCount = static_cast<uint32_t>(enabledExtensions->size());
+	dci.ppEnabledExtensionNames = enabledExtensions->data();
 
 	if (enableValidationLayers) {
 		dci.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
